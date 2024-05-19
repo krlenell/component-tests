@@ -1,0 +1,31 @@
+.main {
+  @apply w-[600px] bg-white rounded-xl p-5 flex items-center justify-center flex-col;
+}
+
+.wrapper {
+  @apply m-0 w-[70%] relative;
+}
+
+/* .priceInputContainer { */
+/*   @apply w-full; */
+/* } */
+
+.sliderContainer {
+  @apply h-[10px] relative bg-black rounded-[5px];
+}
+
+.priceSlider {
+  @apply h-full left-1/4 right-[15%] absolute rounded-[5px] bg-[#01940b];
+}
+
+.rangeInput {
+  @apply relative;
+}
+
+.rangeInput input {
+  @apply absolute w-full h-[5px] top-[-7px] bg-transparent cursor-pointer pointer-events-none appearance-none;
+}
+
+.bubble {
+  @apply text-white bg-purple-600 top-0 absolute rounded-s p-1 left-1/2 translate-x-1/2;
+}
