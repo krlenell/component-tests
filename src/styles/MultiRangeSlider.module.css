@@ -1,5 +1,5 @@
 .main {
-  @apply w-[600px] bg-white rounded-xl p-5 flex items-center justify-center flex-col;
+  @apply w-[60vw] bg-white rounded-xl p-5 flex items-center justify-center flex-col;
 }
 
 .wrapper {

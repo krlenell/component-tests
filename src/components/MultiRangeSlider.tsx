@@ -6,30 +6,54 @@ import "@/styles/slider.css";
 //todo get max value from props
 const MultiRangeSlider = () => {
   const globalMin = 0;
-  const globalMax = 100;
+  const globalMax = 64;
   const dummyMinVal = 3;
   const dummyMaxVal = 16;
+  const priceGap = 2;
   const [maxValue, setMaxValue] = useState<number>(dummyMaxVal);
   const [tempMaxValue, setTempMaxValue] = useState<number>(dummyMaxVal); //todo switch to ref
   const [minValue, setMinValue] = useState<number>(dummyMinVal);
   const [tempMinValue, setTempMinValue] = useState<number>(dummyMinVal);
+
+  useEffect(() => {
+    console.log("maxValue", maxValue);
+    console.log("minValue", minValue);
+  }, [maxValue, minValue]);
 
   const toNumber = (s: string) => {
     return parseInt(s, 10);
   };
 
   const getPercentage = (val: number) => {
-    ((val - globalMin) / (globalMax - globalMin)) * 100;
+    return ((val - globalMin) / (globalMax - globalMin)) * 100;
   };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("e", e);
-    if (e.target.id === "minRange") {
-      setTempMinValue(toNumber(e.target.value));
-    }
-    if (e.target.id === "maxRange") {
-      setTempMaxValue(toNumber(e.target.value));
+
+  const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = toNumber(e.target.value);
+    if (val <= maxValue - priceGap) {
+      setTempMinValue(val);
     }
   };
+
+  const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = toNumber(e.target.value);
+    if (val >= minValue + priceGap) {
+      setTempMaxValue(val);
+    }
+  };
+
+  const handleMinRelease = () => {
+    if (tempMinValue <= maxValue - priceGap) {
+      setMinValue(tempMinValue);
+    }
+  };
+
+  const handleMaxRelease = () => {
+    if (tempMaxValue >= minValue + priceGap) {
+      setMaxValue(tempMaxValue);
+    }
+  };
+
   return (
     <Fragment>
       <div className={styles.main}>
@@ -39,8 +63,8 @@ const MultiRangeSlider = () => {
               <div
                 className={styles.priceSlider}
                 style={{
-                  left: `calc(${tempMinValue}%)`,
-                  right: `calc(${100 - tempMaxValue}%)`,
+                  left: `calc(${getPercentage(tempMinValue)}%)`,
+                  right: `calc(${100 - getPercentage(tempMaxValue)}%)`,
                 }}
               ></div>
             </div>
@@ -56,7 +80,7 @@ const MultiRangeSlider = () => {
             <output
               className={styles.bubble}
               style={{
-                left: `calc(${tempMinValue}% + (${-18 - tempMinValue * 0.15}px))`,
+                left: `calc(${getPercentage(tempMinValue)}% + (${-18 - tempMinValue * 0.15}px))`,
               }}
             >
               {tempMinValue}
@@ -69,7 +93,9 @@ const MultiRangeSlider = () => {
               max={globalMax}
               value={tempMinValue}
               step="1"
-              onChange={handleChange}
+              onChange={handleMinChange}
+              onMouseUp={handleMinRelease}
+              onTouchEnd={handleMinRelease}
             />
             <input
               id="maxRange"
@@ -79,12 +105,14 @@ const MultiRangeSlider = () => {
               max={globalMax}
               value={tempMaxValue}
               step="1"
-              onChange={handleChange}
+              onChange={handleMaxChange}
+              onMouseUp={handleMaxRelease}
+              onTouchEnd={handleMaxRelease}
             />
             <output
               className={styles.bubble}
               style={{
-                left: `calc(${tempMaxValue}% + (${-18 - tempMaxValue * 0.15}px))`,
+                left: `calc(${getPercentage(tempMaxValue)}% + (${-18 - tempMaxValue * 0.15}px))`,
               }}
             >
               {tempMaxValue}
