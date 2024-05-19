@@ -1,31 +1,39 @@
 "use client";
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect, Dispatch, SetStateAction } from "react";
 import styles from "@/styles/MultiRangeSlider.module.css";
 import "@/styles/slider.css";
+import { PriceRange } from "@/types/types";
+
+interface Props {
+  min: number;
+  max: number;
+  setSelectedPriceRange: Dispatch<SetStateAction<PriceRange | null>>;
+}
 
 //todo get max value from props
-const MultiRangeSlider = () => {
-  const globalMin = 0;
-  const globalMax = 64;
-  const dummyMinVal = 3;
-  const dummyMaxVal = 16;
+const MultiRangeSlider = (props: Props) => {
+  const { min, max, setSelectedPriceRange } = props;
   const priceGap = 2;
-  const [maxValue, setMaxValue] = useState<number>(dummyMaxVal);
-  const [tempMaxValue, setTempMaxValue] = useState<number>(dummyMaxVal); //todo switch to ref
-  const [minValue, setMinValue] = useState<number>(dummyMinVal);
-  const [tempMinValue, setTempMinValue] = useState<number>(dummyMinVal);
+  const [minValue, setMinValue] = useState<number>(min);
+  const [tempMinValue, setTempMinValue] = useState<number>(min);
+  const [maxValue, setMaxValue] = useState<number>(max);
+  const [tempMaxValue, setTempMaxValue] = useState<number>(max);
 
   useEffect(() => {
     console.log("maxValue", maxValue);
     console.log("minValue", minValue);
-  }, [maxValue, minValue]);
+    setSelectedPriceRange({
+      min: minValue,
+      max: maxValue,
+    });
+  }, [maxValue, minValue, setSelectedPriceRange]);
 
   const toNumber = (s: string) => {
     return parseInt(s, 10);
   };
 
   const getPercentage = (val: number) => {
-    return ((val - globalMin) / (globalMax - globalMin)) * 100;
+    return ((val - min) / (max - min)) * 100;
   };
 
   const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,8 +79,8 @@ const MultiRangeSlider = () => {
             {/* //maybe delete this */}
             <div className="absolute w-full">
               <div className="flex justify-between text-black">
-                <div>{globalMin}</div>
-                <div>{globalMax}</div>
+                <div>{min}</div>
+                <div>{max}</div>
               </div>
             </div>
           </div>
@@ -89,8 +97,8 @@ const MultiRangeSlider = () => {
               id="minRange"
               className="priceRange"
               type="range"
-              min={globalMin}
-              max={globalMax}
+              min={min}
+              max={max}
               value={tempMinValue}
               step="1"
               onChange={handleMinChange}
@@ -101,8 +109,8 @@ const MultiRangeSlider = () => {
               id="maxRange"
               className="priceRange"
               type="range"
-              min={globalMin}
-              max={globalMax}
+              min={min}
+              max={max}
               value={tempMaxValue}
               step="1"
               onChange={handleMaxChange}
