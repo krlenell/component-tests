@@ -27,3 +27,11 @@ slider::-moz-range-thumb {
   border: solid 4px white;
   pointer-events: auto;
 }
+
+.rangeInput input {
+  @apply absolute w-full h-[5px] top-[-5px] bg-transparent cursor-pointer pointer-events-none appearance-none;
+}
+
+.rangeValue {
+  @apply text-white bottom-2 absolute p-1 pointer-events-none w-[40px] text-center;
+}

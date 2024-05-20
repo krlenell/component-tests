@@ -1,6 +1,14 @@
 "use client";
-import { Fragment, useState, useEffect, Dispatch, SetStateAction } from "react";
-import styles from "@/styles/MultiRangeSlider.module.css";
+import {
+  Fragment,
+  useState,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+  useRef,
+  MutableRefObject,
+  RefObject,
+} from "react";
 import "@/styles/slider.css";
 import { PriceRange } from "@/types/types";
 
@@ -13,11 +21,14 @@ interface Props {
 //todo get max value from props
 const MultiRangeSlider = (props: Props) => {
   const { min, max, setSelectedPriceRange } = props;
-  const priceGap = 5; //try makinng a 5%
+  const priceGap = (min + max) * 0.15;
   const [minValue, setMinValue] = useState<number>(min);
   const [tempMinValue, setTempMinValue] = useState<number>(min);
   const [maxValue, setMaxValue] = useState<number>(max);
   const [tempMaxValue, setTempMaxValue] = useState<number>(max);
+
+  const minSliderRef = useRef(null);
+  const maxSliderRef = useRef(null);
 
   useEffect(() => {
     console.log("maxValue", maxValue);
@@ -30,6 +41,19 @@ const MultiRangeSlider = (props: Props) => {
 
   const toNumber = (s: string) => {
     return parseInt(s, 10);
+  };
+
+  const calculateTooltipPosition = (
+    sliderRef: RefObject<HTMLInputElement>,
+    value: number,
+  ) => {
+    if (!sliderRef.current) return 0;
+    const slider = sliderRef.current;
+    const percentage = (value - min) / (max - min);
+    const thumbWidth = 24; // Width of the thumb
+    const tooltipWidth = 40; // Approximate width of the tooltip
+    const offset = percentage * (slider.clientWidth - thumbWidth);
+    return offset + thumbWidth / 2 - tooltipWidth / 2;
   };
 
   const getPercentage = (val: number) => {
@@ -64,11 +88,11 @@ const MultiRangeSlider = (props: Props) => {
 
   return (
     <Fragment>
-      <div className={styles.main}>
+      <div className="w-[300px] rounded-xl p-5 relative">
         <div>
-          <div className={styles.sliderContainer}>
+          <div className="h-[5px] relative bg-[#595959] rounded-[5px]">
             <div
-              className={styles.priceSlider}
+              className="h-full absolute rounded-[5px] bg-white"
               style={{
                 left: `calc(${getPercentage(tempMinValue)}%)`,
                 right: `calc(${100 - getPercentage(tempMaxValue)}%)`,
@@ -76,20 +100,20 @@ const MultiRangeSlider = (props: Props) => {
             ></div>
           </div>
         </div>
-        <div className={styles.rangeInput}>
+        <div className="rangeInput relative">
           <div
-            className={styles.bubble}
+            className="rangeValue"
             style={{
-              left: `calc(${((tempMinValue - min) / (max - min)) * 100}% - 5px)`,
+              left: `calc(${calculateTooltipPosition(minSliderRef, tempMinValue) + 18}px)`,
               transform: "translateX(-50%)",
             }}
           >
             {tempMinValue}
           </div>
           <div
-            className={styles.bubble}
+            className="rangeValue"
             style={{
-              left: `calc(${getPercentage(tempMaxValue)}% + (${-18 - tempMaxValue * 0.15}px))`,
+              left: `calc(${calculateTooltipPosition(maxSliderRef, tempMaxValue)}px)`,
             }}
           >
             {tempMaxValue}
@@ -97,6 +121,7 @@ const MultiRangeSlider = (props: Props) => {
 
           <input
             id="minRange"
+            ref={minSliderRef}
             className="slider"
             type="range"
             min={min}
@@ -109,6 +134,7 @@ const MultiRangeSlider = (props: Props) => {
           />
           <input
             id="maxRange"
+            ref={maxSliderRef}
             className="slider"
             type="range"
             min={min}
