@@ -5,6 +5,7 @@
   background: #555;
   pointer-events: auto;
   -webkit-appearance: none;
+  border: 2px solid blue;
 }
 
 input[type="range"]::-moz-range-thumb {

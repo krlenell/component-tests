@@ -1,13 +1,9 @@
 .main {
-  @apply w-[60vw] bg-white rounded-xl p-5 flex items-center justify-center flex-col;
+  @apply w-[60vw] bg-white rounded-xl p-5;
 }
 
-.wrapper {
-  @apply m-0 w-[70%] relative;
-}
-
-/* .priceInputContainer { */
-/*   @apply w-full; */
+/* .wrapper { */
+/*   @apply m-0 w-[70%] relative; */
 /* } */
 
 .sliderContainer {

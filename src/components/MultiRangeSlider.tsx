@@ -13,7 +13,7 @@ interface Props {
 //todo get max value from props
 const MultiRangeSlider = (props: Props) => {
   const { min, max, setSelectedPriceRange } = props;
-  const priceGap = 2;
+  const priceGap = 5; //try makinng a 5%
   const [minValue, setMinValue] = useState<number>(min);
   const [tempMinValue, setTempMinValue] = useState<number>(min);
   const [maxValue, setMaxValue] = useState<number>(max);
@@ -85,14 +85,15 @@ const MultiRangeSlider = (props: Props) => {
             </div>
           </div>
           <div className={styles.rangeInput}>
-            <output
+            <div
               className={styles.bubble}
               style={{
-                left: `calc(${getPercentage(tempMinValue)}% + (${-18 - tempMinValue * 0.15}px))`,
+                left: `calc(${((tempMinValue - min) / (max - min)) * 100}% - 15px)`,
+                transform: "translateX(-50%)",
               }}
             >
               {tempMinValue}
-            </output>
+            </div>
             <input
               id="minRange"
               className="priceRange"
@@ -117,14 +118,14 @@ const MultiRangeSlider = (props: Props) => {
               onMouseUp={handleMaxRelease}
               onTouchEnd={handleMaxRelease}
             />
-            <output
+            <div
               className={styles.bubble}
               style={{
                 left: `calc(${getPercentage(tempMaxValue)}% + (${-18 - tempMaxValue * 0.15}px))`,
               }}
             >
               {tempMaxValue}
-            </output>
+            </div>
           </div>
         </div>
       </div>
