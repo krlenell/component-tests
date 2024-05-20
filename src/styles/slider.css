@@ -32,6 +32,6 @@ slider::-moz-range-thumb {
   @apply absolute w-full h-[5px] top-[-5px] bg-transparent cursor-pointer pointer-events-none appearance-none;
 }
 
-.rangeValue {
+.tooltip {
   @apply text-white bottom-2 absolute p-1 pointer-events-none w-[40px] text-center;
 }

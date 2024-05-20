@@ -101,16 +101,15 @@ const MultiRangeSlider = (props: Props) => {
         </div>
         <div className="rangeInput relative">
           <div
-            className="rangeValue"
+            className="tooltip"
             style={{
-              left: `calc(${calculateTooltipPosition(minSliderRef, tempMinValue) + 18}px)`,
-              transform: "translateX(-50%)",
+              left: `calc(${calculateTooltipPosition(minSliderRef, tempMinValue)}px)`,
             }}
           >
             {tempMinValue}
           </div>
           <div
-            className="rangeValue"
+            className="tooltip"
             style={{
               left: `calc(${calculateTooltipPosition(maxSliderRef, tempMaxValue)}px)`,
             }}
