@@ -6,7 +6,6 @@ import {
   Dispatch,
   SetStateAction,
   useRef,
-  MutableRefObject,
   RefObject,
 } from "react";
 import "@/styles/slider.css";
