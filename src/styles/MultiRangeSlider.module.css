@@ -1,17 +1,13 @@
 .main {
-  @apply w-[60vw] bg-white rounded-xl p-5;
+  @apply w-[300px] rounded-xl p-5 relative;
 }
 
-/* .wrapper { */
-/*   @apply m-0 w-[70%] relative; */
-/* } */
-
 .sliderContainer {
-  @apply h-[10px] relative bg-black rounded-[5px];
+  @apply h-[5px] relative bg-[#595959] rounded-[5px];
 }
 
 .priceSlider {
-  @apply h-full left-1/4 right-[15%] absolute rounded-[5px] bg-[#01940b];
+  @apply h-full absolute rounded-[5px] bg-white;
 }
 
 .rangeInput {
@@ -19,9 +15,9 @@
 }
 
 .rangeInput input {
-  @apply absolute w-full h-[5px] top-[-7px] bg-transparent cursor-pointer pointer-events-none appearance-none;
+  @apply absolute w-full h-[5px] top-[-5px] bg-transparent cursor-pointer pointer-events-none appearance-none;
 }
 
 .bubble {
-  @apply text-white bg-purple-600 top-0 absolute rounded-s p-1 left-1/2 translate-x-1/2;
+  @apply text-white bg-purple-600 bottom-2 absolute rounded-s p-1 left-1/2 translate-x-1/2;
 }

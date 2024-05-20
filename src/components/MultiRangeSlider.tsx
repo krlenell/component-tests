@@ -65,68 +65,60 @@ const MultiRangeSlider = (props: Props) => {
   return (
     <Fragment>
       <div className={styles.main}>
-        <div className={styles.wrapper}>
-          <div className={styles.priceInputContainer}>
-            <div className={styles.sliderContainer}>
-              <div
-                className={styles.priceSlider}
-                style={{
-                  left: `calc(${getPercentage(tempMinValue)}%)`,
-                  right: `calc(${100 - getPercentage(tempMaxValue)}%)`,
-                }}
-              ></div>
-            </div>
-            {/* //maybe delete this */}
-            <div className="absolute w-full">
-              <div className="flex justify-between text-black">
-                <div>{min}</div>
-                <div>{max}</div>
-              </div>
-            </div>
-          </div>
-          <div className={styles.rangeInput}>
+        <div>
+          <div className={styles.sliderContainer}>
             <div
-              className={styles.bubble}
+              className={styles.priceSlider}
               style={{
-                left: `calc(${((tempMinValue - min) / (max - min)) * 100}% - 15px)`,
-                transform: "translateX(-50%)",
+                left: `calc(${getPercentage(tempMinValue)}%)`,
+                right: `calc(${100 - getPercentage(tempMaxValue)}%)`,
               }}
-            >
-              {tempMinValue}
-            </div>
-            <input
-              id="minRange"
-              className="priceRange"
-              type="range"
-              min={min}
-              max={max}
-              value={tempMinValue}
-              step="1"
-              onChange={handleMinChange}
-              onMouseUp={handleMinRelease}
-              onTouchEnd={handleMinRelease}
-            />
-            <input
-              id="maxRange"
-              className="priceRange"
-              type="range"
-              min={min}
-              max={max}
-              value={tempMaxValue}
-              step="1"
-              onChange={handleMaxChange}
-              onMouseUp={handleMaxRelease}
-              onTouchEnd={handleMaxRelease}
-            />
-            <div
-              className={styles.bubble}
-              style={{
-                left: `calc(${getPercentage(tempMaxValue)}% + (${-18 - tempMaxValue * 0.15}px))`,
-              }}
-            >
-              {tempMaxValue}
-            </div>
+            ></div>
           </div>
+        </div>
+        <div className={styles.rangeInput}>
+          <div
+            className={styles.bubble}
+            style={{
+              left: `calc(${((tempMinValue - min) / (max - min)) * 100}% - 5px)`,
+              transform: "translateX(-50%)",
+            }}
+          >
+            {tempMinValue}
+          </div>
+          <div
+            className={styles.bubble}
+            style={{
+              left: `calc(${getPercentage(tempMaxValue)}% + (${-18 - tempMaxValue * 0.15}px))`,
+            }}
+          >
+            {tempMaxValue}
+          </div>
+
+          <input
+            id="minRange"
+            className="slider"
+            type="range"
+            min={min}
+            max={max}
+            value={tempMinValue}
+            step="1"
+            onChange={handleMinChange}
+            onMouseUp={handleMinRelease}
+            onTouchEnd={handleMinRelease}
+          />
+          <input
+            id="maxRange"
+            className="slider"
+            type="range"
+            min={min}
+            max={max}
+            value={tempMaxValue}
+            step="1"
+            onChange={handleMaxChange}
+            onMouseUp={handleMaxRelease}
+            onTouchEnd={handleMaxRelease}
+          />
         </div>
       </div>
     </Fragment>
