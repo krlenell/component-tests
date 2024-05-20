@@ -1,6 +1,13 @@
 "use client";
-import { Fragment, useState, useEffect, Dispatch, SetStateAction } from "react";
-import styles from "@/styles/MultiRangeSlider.module.css";
+import {
+  Fragment,
+  useState,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+  useRef,
+  RefObject,
+} from "react";
 import "@/styles/slider.css";
 import { PriceRange } from "@/types/types";
 
@@ -13,11 +20,14 @@ interface Props {
 //todo get max value from props
 const MultiRangeSlider = (props: Props) => {
   const { min, max, setSelectedPriceRange } = props;
-  const priceGap = 2;
+  const priceGap = (min + max) * 0.15;
   const [minValue, setMinValue] = useState<number>(min);
   const [tempMinValue, setTempMinValue] = useState<number>(min);
   const [maxValue, setMaxValue] = useState<number>(max);
   const [tempMaxValue, setTempMaxValue] = useState<number>(max);
+
+  const minSliderRef = useRef(null);
+  const maxSliderRef = useRef(null);
 
   useEffect(() => {
     console.log("maxValue", maxValue);
@@ -30,6 +40,19 @@ const MultiRangeSlider = (props: Props) => {
 
   const toNumber = (s: string) => {
     return parseInt(s, 10);
+  };
+
+  const calculateTooltipPosition = (
+    sliderRef: RefObject<HTMLInputElement>,
+    value: number,
+  ) => {
+    if (!sliderRef.current) return 0;
+    const slider = sliderRef.current;
+    const percentage = (value - min) / (max - min);
+    const thumbWidth = 24; // Width of the thumb
+    const tooltipWidth = 40; // Approximate width of the tooltip
+    const offset = percentage * (slider.clientWidth - thumbWidth);
+    return offset + thumbWidth / 2 - tooltipWidth / 2;
   };
 
   const getPercentage = (val: number) => {
@@ -64,68 +87,62 @@ const MultiRangeSlider = (props: Props) => {
 
   return (
     <Fragment>
-      <div className={styles.main}>
-        <div className={styles.wrapper}>
-          <div className={styles.priceInputContainer}>
-            <div className={styles.sliderContainer}>
-              <div
-                className={styles.priceSlider}
-                style={{
-                  left: `calc(${getPercentage(tempMinValue)}%)`,
-                  right: `calc(${100 - getPercentage(tempMaxValue)}%)`,
-                }}
-              ></div>
-            </div>
-            {/* //maybe delete this */}
-            <div className="absolute w-full">
-              <div className="flex justify-between text-black">
-                <div>{min}</div>
-                <div>{max}</div>
-              </div>
-            </div>
-          </div>
-          <div className={styles.rangeInput}>
-            <output
-              className={styles.bubble}
+      <div className="w-[300px] rounded-xl p-5 relative">
+        <div>
+          <div className="h-[5px] relative bg-[#595959] rounded-[5px]">
+            <div
+              className="h-full absolute rounded-[5px] bg-white"
               style={{
-                left: `calc(${getPercentage(tempMinValue)}% + (${-18 - tempMinValue * 0.15}px))`,
+                left: `calc(${getPercentage(tempMinValue)}%)`,
+                right: `calc(${100 - getPercentage(tempMaxValue)}%)`,
               }}
-            >
-              {tempMinValue}
-            </output>
-            <input
-              id="minRange"
-              className="priceRange"
-              type="range"
-              min={min}
-              max={max}
-              value={tempMinValue}
-              step="1"
-              onChange={handleMinChange}
-              onMouseUp={handleMinRelease}
-              onTouchEnd={handleMinRelease}
-            />
-            <input
-              id="maxRange"
-              className="priceRange"
-              type="range"
-              min={min}
-              max={max}
-              value={tempMaxValue}
-              step="1"
-              onChange={handleMaxChange}
-              onMouseUp={handleMaxRelease}
-              onTouchEnd={handleMaxRelease}
-            />
-            <output
-              className={styles.bubble}
-              style={{
-                left: `calc(${getPercentage(tempMaxValue)}% + (${-18 - tempMaxValue * 0.15}px))`,
-              }}
-            >
-              {tempMaxValue}
-            </output>
+            ></div>
           </div>
+        </div>
+        <div className="rangeInput relative">
+          <div
+            className="tooltip"
+            style={{
+              left: `calc(${calculateTooltipPosition(minSliderRef, tempMinValue)}px)`,
+            }}
+          >
+            {tempMinValue}
+          </div>
+          <div
+            className="tooltip"
+            style={{
+              left: `calc(${calculateTooltipPosition(maxSliderRef, tempMaxValue)}px)`,
+            }}
+          >
+            {tempMaxValue}
+          </div>
+
+          <input
+            id="minRange"
+            ref={minSliderRef}
+            className="slider"
+            type="range"
+            min={min}
+            max={max}
+            value={tempMinValue}
+            step="1"
+            onChange={handleMinChange}
+            onMouseUp={handleMinRelease}
+            onTouchEnd={handleMinRelease}
+          />
+          <input
+            id="maxRange"
+            ref={maxSliderRef}
+            className="slider"
+            type="range"
+            min={min}
+            max={max}
+            value={tempMaxValue}
+            step="1"
+            onChange={handleMaxChange}
+            onMouseUp={handleMaxRelease}
+            onTouchEnd={handleMaxRelease}
+          />
         </div>
       </div>
     </Fragment>

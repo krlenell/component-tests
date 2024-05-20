@@ -12,12 +12,12 @@ export default function Home() {
   }, [selectedPriceRange]);
 
   return (
-    <Fragment>
+    <div className="h-full p-5">
       <MultiRangeSlider
         min={0}
         max={100}
         setSelectedPriceRange={setSelectedPriceRange}
       />
-    </Fragment>
+    </div>
   );
 }
